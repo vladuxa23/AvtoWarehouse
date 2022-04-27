@@ -72,12 +72,29 @@ def add_model(model, generation) -> bool:
         return False
 
 
+def add_drive_type(drive) -> bool:
+    """
+    Функция добавления данных id и типа двигателя в таблицу
+    :return:Если True то добавляет данные в таблицу, если FALSE то резит ошибку
+    """
+    try:
+        cursor.execute("INSERT INTO drive_type(type) VALUES (N'%s')" % (drive))
+        conn.commit()
+        return True
+    except pymssql._pymssql.IntegrityError as err:
+        print(err)
+        return False
+
+#def add_engine_type
+
+
+
+
+
 if __name__ == '__main__':
     # ПОЛУЧЕНИЕ ДАННЫХ ИЗ ВСЕХ ТАБЛИЦ
     # for table in get_tables_names():
     #     get_all_table_data(table)
-
-
 
     # print(cursor.fetchall())  # показать все строки результата запроса
     conn.close()

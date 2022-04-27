@@ -40,7 +40,7 @@ def get_brands(cache: dict) -> list:
 
 def get_models(cache: dict) -> list:
     """
-    Функция по ключу вытаскивает все можели и поколения (за исключением дублей)
+    Функция по ключу вытаскивает все модели и поколения (за исключением дублей)
     :param cache:
     :return:
     """
@@ -52,6 +52,19 @@ def get_models(cache: dict) -> list:
 
     return list(brands)
 
+def get_drive_type(cache: dict) -> list:
+    """
+    Функция по ключу вытаскивает тип привода а/м (за исключением  дублей)
+    :param cache:
+    :return: типы приводов для всех автомобилей в словаре
+    """
+    drive = set()
+    for key in cache:
+        if cache[key].get('Привод:'):
+            drive.add((cache[key].get('Привод:')))
+
+    return list(drive)
+
 
 if __name__ == '__main__':
     ALL_CACHE = get_cache()
@@ -62,7 +75,17 @@ if __name__ == '__main__':
     #     mdb.add_brand(brand)
 
     # ЗАГРУЗКА ДАННЫХ В models
-    for model in get_models(ALL_CACHE):
-        mdb.add_model(*model)
+    # for model in get_models(ALL_CACHE):
+    #     mdb.add_model(*model)
+
+    #ЗАГРУЗКА ДАННЫХ В complectation
+    # for drive in get_drive_type(ALL_CACHE):
+    #     mdb.add_drive_type(drive)
+
+    # get_drive_type(ALL_CACHE)
+
+
+
+
 
     mdb.conn.close()
