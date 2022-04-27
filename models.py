@@ -12,8 +12,9 @@ cursor = conn.cursor(as_dict=True)
 
 def get_tables_names() -> list:
     """
+    Функция получения полного списка названий талиц
 
-    :return:
+    :return: список таблиц
     """
 
     cursor.execute("SELECT * FROM information_schema.tables")
@@ -26,9 +27,9 @@ def get_tables_names() -> list:
 
 def get_all_table_data(table) -> list:
     """
-
+    Функция получения данных из таблиц
     :param table:
-    :return:
+    :return: список данных из таблиц
     """
 
     cursor.execute(f"SELECT * FROM {table}")
@@ -37,9 +38,10 @@ def get_all_table_data(table) -> list:
 
 def add_brand(brand_name: str) -> bool:
     """
-
+    Функция добавления id и названия брэндов в таблицу
+ TODO НЕ ПОНЯЛ ПОЧЕМУ БУЛ
     :param brand_name:
-    :return:
+    :return: Если True то добавляет данные в таблицу, если FALSE то резит ошибку
     """
 
     try:
@@ -54,10 +56,10 @@ def add_brand(brand_name: str) -> bool:
 
 def add_model(model, generation) -> bool:
     """
-
+    Функция добавления данных id и поколения в таблицу
     :param model:
     :param generation:
-    :return:
+    :return: Если True то добавляет данные в таблицу, если FALSE то резит ошибку
     """
 
     try:

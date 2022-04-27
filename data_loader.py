@@ -8,7 +8,7 @@ def get_cache():
     """
     Получение всех данных из cache (json)
 
-    :return:
+    :return: словарь своварей данных из БД
     """
 
     all_cache_data = {}
@@ -27,7 +27,7 @@ def get_brands(cache: dict) -> list:
     Получение всех брэндов из загруженного кэша
 
     :param cache:
-    :return:
+    :return:список брэндов
     """
 
     brands = set()
@@ -40,7 +40,7 @@ def get_brands(cache: dict) -> list:
 
 def get_models(cache: dict) -> list:
     """
-
+    Функция по ключу вытаскивает все можели и поколения (за исключением дублей)
     :param cache:
     :return:
     """
