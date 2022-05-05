@@ -12,7 +12,7 @@ cursor = conn.cursor(as_dict=True)
 
 def get_tables_names() -> list:
     """
-    Функция получения полного списка названий талиц
+    Функция получения полного списка названий таблиц
 
     :return: список таблиц
     """
@@ -74,7 +74,7 @@ def add_model(model, generation) -> bool:
 
 def add_drive_type(drive) -> bool:
     """
-    Функция добавления данных id и типа двигателя в таблицу
+    Функция добавления данных id и типа привода в таблицу
     :return:Если True то добавляет данные в таблицу, если FALSE то резит ошибку
     """
     try:
@@ -85,7 +85,32 @@ def add_drive_type(drive) -> bool:
         print(err)
         return False
 
-#def add_engine_type
+def add_engine_type(engine_type) -> bool:
+    """
+    Функция добавления данных id и типа двигателя в таблицу
+    :return:Если True то добавляет данные в таблицу, если FALSE то резит ошибку
+    """
+    try:
+        cursor.execute("INSERT INTO engine_type(type) VALUES (N'%s')" %(engine_type))
+        conn.commit()
+        return True
+    except pymssql._pymssql.IntegrityError as err:
+        print(err)
+        return False
+
+def add_transmission_type(transmission_type)-> bool:
+    """
+    Функция добавления данных id и типа коробки передач в базу
+    :param transmission_type:
+    :return: Если True то добавляет данные в таблицу, если FALSE то резит ошибку
+    """
+    try:
+        cursor.execute("INSERT INTO transmission_type(type) VALUES (N'%s')" %(transmission_type))
+        conn.commit()
+        return True
+    except pymssql._pymssql.IntegrityError as err:
+        print(err)
+        return False
 
 
 

@@ -65,6 +65,30 @@ def get_drive_type(cache: dict) -> list:
 
     return list(drive)
 
+def get_engine_type(cache: dict) -> list:
+    """
+    Функция по ключу вытаскивает тип двигателя а/м (за исключением  дублей)
+    :param cache:
+    :return: типы двигателей для всех автомобилей в словаре
+    """
+    engine_type = set()
+    for key in cache:
+        if cache[key].get('Тип двигателя:'):
+            engine_type.add(cache[key].get('Тип двигателя:'))
+
+    return list(engine_type)
+
+def get_transmission_type(cache: dict) -> list:
+    """
+    Функция по ключу вытаскивает тип коробки передач а/м (за исключением дублей)
+    :param cache:
+    :return: типы коробок передач для всех автомобилей в словаре
+    """
+    transmission_type = set()
+    for key in cache:
+        if cache[key].get("Коробка передач:"):
+            transmission_type.add(cache[key].get("Коробка передач:"))
+    return list(transmission_type)
 
 if __name__ == '__main__':
     ALL_CACHE = get_cache()
@@ -82,9 +106,15 @@ if __name__ == '__main__':
     # for drive in get_drive_type(ALL_CACHE):
     #     mdb.add_drive_type(drive)
 
+    #ЗАГРУЗКА ДАННЫХ в engine_type
+    # for engine_type in get_engine_type(ALL_CACHE):
+    #     mdb.add_engine_type(engine_type)
+
+    #ЗАГРУЗКА ДАННЫХ в transmission_type
+    for transmission_type in get_transmission_type(ALL_CACHE):
+        mdb.add_transmission_type(transmission_type)
+
     # get_drive_type(ALL_CACHE)
-
-
 
 
 
