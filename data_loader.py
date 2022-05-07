@@ -13,7 +13,6 @@ def get_cache():
 
     all_cache_data = {}
     for file_ in os.listdir("cache"):
-
         with open(os.path.join('cache', file_), "r") as f:
             data = json.load(f)
 
@@ -48,9 +47,10 @@ def get_models(cache: dict) -> list:
     brands = set()
     for key in cache:
         if cache[key].get('Поколение:'):
-            brands.add((cache[key].get('Модель'), cache[key].get('Поколение:')))
+            brands.add((cache[key].get('Модель'), cache[key].get('Поколение:'), mdb.get_brand_id_by_brand(cache[key].get('Брэнд'))))
 
     return list(brands)
+
 
 def get_drive_type(cache: dict) -> list:
     """
@@ -65,6 +65,7 @@ def get_drive_type(cache: dict) -> list:
 
     return list(drive)
 
+
 def get_engine_type(cache: dict) -> list:
     """
     Функция по ключу вытаскивает тип двигателя а/м (за исключением  дублей)
@@ -78,6 +79,7 @@ def get_engine_type(cache: dict) -> list:
 
     return list(engine_type)
 
+
 def get_transmission_type(cache: dict) -> list:
     """
     Функция по ключу вытаскивает тип коробки передач а/м (за исключением дублей)
@@ -89,6 +91,7 @@ def get_transmission_type(cache: dict) -> list:
         if cache[key].get("Коробка передач:"):
             transmission_type.add(cache[key].get("Коробка передач:"))
     return list(transmission_type)
+
 
 if __name__ == '__main__':
     ALL_CACHE = get_cache()
@@ -102,20 +105,23 @@ if __name__ == '__main__':
     # for model in get_models(ALL_CACHE):
     #     mdb.add_model(*model)
 
-    #ЗАГРУЗКА ДАННЫХ В complectation
+    # ЗАГРУЗКА ДАННЫХ В complectation
     # for drive in get_drive_type(ALL_CACHE):
     #     mdb.add_drive_type(drive)
 
-    #ЗАГРУЗКА ДАННЫХ в engine_type
+    # ЗАГРУЗКА ДАННЫХ в engine_type
     # for engine_type in get_engine_type(ALL_CACHE):
     #     mdb.add_engine_type(engine_type)
 
-    #ЗАГРУЗКА ДАННЫХ в transmission_type
-    for transmission_type in get_transmission_type(ALL_CACHE):
-        mdb.add_transmission_type(transmission_type)
+    # ЗАГРУЗКА ДАННЫХ в transmission_type
+    # for transmission_type in get_transmission_type(ALL_CACHE):
+    #     mdb.add_transmission_type(transmission_type)
+
+    # ЗАГРУЗКА ДАННЫХ в model_list
+    for model in mdb.get_all_models():
+        mdb.add_model_list(mdb.get_model_id_by_model(model))
+
 
     # get_drive_type(ALL_CACHE)
-
-
 
     mdb.conn.close()

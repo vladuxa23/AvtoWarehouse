@@ -54,7 +54,7 @@ def add_brand(brand_name: str) -> bool:
         return False
 
 
-def add_model(model, generation) -> bool:
+def add_model(model, generation, brand_id) -> bool:
     """
     Функция добавления данных id и поколения в таблицу
     :param model:
@@ -63,7 +63,7 @@ def add_model(model, generation) -> bool:
     """
 
     try:
-        cursor.execute("INSERT INTO models (name, body_code) VALUES (N'%s', N'%s')" % (model, generation))
+        cursor.execute("INSERT INTO models (name, body_code, brand_id) VALUES (N'%s', N'%s', %d)" % (model, generation, brand_id))
         conn.commit()
 
         return True
@@ -85,37 +85,52 @@ def add_drive_type(drive) -> bool:
         print(err)
         return False
 
+
 def add_engine_type(engine_type) -> bool:
     """
     Функция добавления данных id и типа двигателя в таблицу
     :return:Если True то добавляет данные в таблицу, если FALSE то резит ошибку
     """
     try:
-        cursor.execute("INSERT INTO engine_type(type) VALUES (N'%s')" %(engine_type))
+        cursor.execute("INSERT INTO engine_type(type) VALUES (N'%s')" % (engine_type))
         conn.commit()
         return True
     except pymssql._pymssql.IntegrityError as err:
         print(err)
         return False
 
-def add_transmission_type(transmission_type)-> bool:
+
+def add_transmission_type(transmission_type) -> bool:
     """
     Функция добавления данных id и типа коробки передач в базу
     :param transmission_type:
     :return: Если True то добавляет данные в таблицу, если FALSE то резит ошибку
     """
     try:
-        cursor.execute("INSERT INTO transmission_type(type) VALUES (N'%s')" %(transmission_type))
+        cursor.execute("INSERT INTO transmission_type(type) VALUES (N'%s')" % (transmission_type))
         conn.commit()
         return True
     except pymssql._pymssql.IntegrityError as err:
         print(err)
         return False
 
+def add_model_list(model_id):
+    try:
+        brand_id = get_brand_id_by_model_id(model_id)
+        cursor.execute("INSERT INTO model_list(model_id, brand_id) VALUES (%d, %d)" % (model_id, brand_id))
+        conn.commit()
+        return True
+    except pymssql._pymssql.IntegrityError as err:
+        print(err)
+        return False
 
+def get_brand_id_by_model_id(model_id):
+    cursor.execute("SELECT brand_id FROM models WHERE id = %d" % model_id)
+    data = cursor.fetchall()
+    return data[0]["brand_id"]
 
 def get_brand_id_by_brand(brand: str) -> int:
-    cursor.execute("SELECT id from brand  where name = '%s'" % brand)
+    cursor.execute("SELECT id from brand  where name = N'%s'" % brand)
     data = cursor.fetchall()
     return data[0]['id']
 
@@ -126,8 +141,16 @@ def get_all_brands():
     return [elem['name'] for elem in data]
 
 
+def get_model_id_by_model(model: str) -> int:
+    cursor.execute("SELECT id from models  where name = N'%s'" % model)
+    data = cursor.fetchall()
+    return data[0]['id']
 
 
+def get_all_models() -> list:
+    cursor.execute("SELECT name FROM models")
+    data = cursor.fetchall()
+    return [elem['name'] for elem in data]
 
 # def add_model_list(id: int) -> bool:
 #     """
@@ -145,19 +168,14 @@ def get_all_brands():
 #         return False
 
 
-
-
-
-
-
-
 if __name__ == '__main__':
     # ПОЛУЧЕНИЕ ДАННЫХ ИЗ ВСЕХ ТАБЛИЦ
     # for table in get_tables_names():
     #     get_all_table_data(table)
-    #get_brand_id_by_brand('Audi')
+    # get_brand_id_by_brand('Audi')
+    # print(get_model_id_by_model('Matiz'))
 
-    print(get_all_brands())
+    # print(get_all_brands())
 
     # print(cursor.fetchall())  # показать все строки результата запроса
     conn.close()
