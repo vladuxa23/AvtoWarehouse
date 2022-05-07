@@ -114,12 +114,50 @@ def add_transmission_type(transmission_type)-> bool:
 
 
 
+def get_brand_id_by_brand(brand: str) -> int:
+    cursor.execute("SELECT id from brand  where name = '%s'" % brand)
+    data = cursor.fetchall()
+    return data[0]['id']
+
+
+def get_all_brands():
+    cursor.execute("SELECT name FROM brand")
+    data = cursor.fetchall()
+    return [elem['name'] for elem in data]
+
+
+
+
+
+# def add_model_list(id: int) -> bool:
+#     """
+#     Функция добавляет id брэнда в таблицу model_list
+#     :param id:
+#     :return: Если True то добавляет данные в таблицу, если FALSE то резит ошибку
+#     """
+#     try:
+#         cursor.execute("INSERT INTO brand (brandid) VALUES ('%s')" % id)
+#         conn.commit()
+#
+#         return True
+#     except pymssql._pymssql.IntegrityError as err:
+#         print(err)
+#         return False
+
+
+
+
+
+
 
 
 if __name__ == '__main__':
     # ПОЛУЧЕНИЕ ДАННЫХ ИЗ ВСЕХ ТАБЛИЦ
     # for table in get_tables_names():
     #     get_all_table_data(table)
+    #get_brand_id_by_brand('Audi')
+
+    print(get_all_brands())
 
     # print(cursor.fetchall())  # показать все строки результата запроса
     conn.close()
