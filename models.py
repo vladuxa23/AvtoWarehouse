@@ -78,7 +78,7 @@ def add_drive_type(drive) -> bool:
     :return:Если True то добавляет данные в таблицу, если FALSE то резит ошибку
     """
     try:
-        cursor.execute("INSERT INTO drive_type(type) VALUES (N'%s')" % (drive))
+        cursor.execute("INSERT INTO drive_type(type) VALUES (N'%s')" % drive)
         conn.commit()
         return True
     except pymssql._pymssql.IntegrityError as err:
