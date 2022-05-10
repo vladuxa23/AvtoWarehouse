@@ -152,20 +152,27 @@ def get_all_models() -> list:
     data = cursor.fetchall()
     return [elem['name'] for elem in data]
 
+
 def get_model_list_id() -> list:
     cursor.execute("SELECT id FROM model_list")
     data = cursor.fetchall()
     return data[0]['id']
 
-def get_model_list_id_by_brand_and_model(brand, model):
-    # cursor.execute("SELECT id FROM brand WHERE id = %d" % brand)
-    cursor.execute("SELECT name FROM brand and SELECT model FROM models WHERE id = %d" % model)
-    data = cursor.fetchall()
-    return data[0]['id']
 
-def get_engine_type_id_by_name() -> list:
-    ...
+def get_model_list_id_by_brand_and_model(brand, model) -> int:
 
+    cursor.execute("SELECT id FROM brand WHERE name = '%s'" % brand)
+    brand_id = cursor.fetchall()[0]["id"]
+
+    cursor.execute("SELECT id FROM models WHERE name = '%s'" % model)
+    model_id = cursor.fetchall()[0]["id"]
+
+    cursor.execute("SELECT id FROM model_list WHERE brand_id = %d AND model_id = %d" % (brand_id, model_id))
+    model_list_id = cursor.fetchall()[0]['id']
+
+    return model_list_id
+
+def get_engine_type_id_by_name(name: str) -> int:
 
     # cursor.execute("SELECT brand_id FROM models WHERE id = %d" % model_id)
     # data = cursor.fetchall()
