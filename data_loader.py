@@ -93,6 +93,20 @@ def get_transmission_type(cache: dict) -> list:
     return list(transmission_type)
 
 
+def get_complectation(cache: dict) -> list:
+    complectation = set()
+    for key in cache:
+        if cache[key].get("Брэнд"):
+            complectation.add((cache[key].get("Брэнд"), cache[key].get("Модель"), cache[key].get("Тип двигателя:"),
+                              cache[key].get("Привод:"), cache[key].get("Коробка передач:")))
+    return list(complectation)
+
+
+
+
+
+
+
 if __name__ == '__main__':
     ALL_CACHE = get_cache()
     get_brands(ALL_CACHE)
@@ -118,10 +132,13 @@ if __name__ == '__main__':
     #     mdb.add_transmission_type(transmission_type)
 
     # ЗАГРУЗКА ДАННЫХ в model_list
-    for model in mdb.get_all_models():
-        mdb.add_model_list(mdb.get_model_id_by_model(model))
+    # for model in mdb.get_all_models():
+    #     mdb.add_model_list(mdb.get_model_id_by_model(model))
+
 
 
     # get_drive_type(ALL_CACHE)
+
+    get_complectation(ALL_CACHE)
 
     mdb.conn.close()

@@ -152,20 +152,34 @@ def get_all_models() -> list:
     data = cursor.fetchall()
     return [elem['name'] for elem in data]
 
-# def add_model_list(id: int) -> bool:
-#     """
-#     Функция добавляет id брэнда в таблицу model_list
-#     :param id:
-#     :return: Если True то добавляет данные в таблицу, если FALSE то резит ошибку
-#     """
-#     try:
-#         cursor.execute("INSERT INTO brand (brandid) VALUES ('%s')" % id)
-#         conn.commit()
-#
-#         return True
-#     except pymssql._pymssql.IntegrityError as err:
-#         print(err)
-#         return False
+def get_model_list_id() -> list:
+    cursor.execute("SELECT id FROM model_list")
+    data = cursor.fetchall()
+    return data[0]['id']
+
+def get_model_list_id_by_brand_and_model(brand, model):
+    # cursor.execute("SELECT id FROM brand WHERE id = %d" % brand)
+    cursor.execute("SELECT name FROM brand and SELECT model FROM models WHERE id = %d" % model)
+    data = cursor.fetchall()
+    return data[0]['id']
+
+def get_engine_type_id_by_name() -> list:
+    ...
+
+
+    # cursor.execute("SELECT brand_id FROM models WHERE id = %d" % model_id)
+    # data = cursor.fetchall()
+    # return data[0]["brand_id"]
+
+def get_drive_type_id_by_name() -> list:
+    ...
+
+def get_transmission_type_id_by_name() -> list:
+    ...
+
+def add_complectation(complectation):
+    ...
+
 
 
 if __name__ == '__main__':
@@ -176,6 +190,8 @@ if __name__ == '__main__':
     # print(get_model_id_by_model('Matiz'))
 
     # print(get_all_brands())
+    # get_model_list_id()
+    get_model_list_id_by_brand_and_model('Daewoo', 'Matiz')
 
     # print(cursor.fetchall())  # показать все строки результата запроса
     conn.close()
