@@ -18,7 +18,9 @@ def get_cache():
 
         all_cache_data.update(data)
 
-    return all_cache_data
+    clear_all_cache_data = {key: value for key, value in all_cache_data.items() if len(value) > 2}
+
+    return clear_all_cache_data
 
 
 def get_brands(cache: dict) -> list:
@@ -97,8 +99,8 @@ def get_complectation(cache: dict) -> list:
     complectation = set()
     for key in cache:
         if cache[key].get("Брэнд"):
-            complectation.add((cache[key].get("Брэнд"), cache[key].get("Модель"), cache[key].get("Комплектация:"),
-                               cache[key].get("Тип двигателя:"),cache[key].get("Привод:"), cache[key].get("Коробка передач:")))
+            complectation.add((cache[key].get("Брэнд"), cache[key].get("Модель"), cache[key].get("Комплектация:", "Отсутствует"),
+                               cache[key].get("Тип двигателя:"), cache[key].get("Привод:"), cache[key].get("Коробка передач:")))
     return list(complectation)
 
 
@@ -109,7 +111,7 @@ def get_complectation(cache: dict) -> list:
 
 if __name__ == '__main__':
     ALL_CACHE = get_cache()
-    get_brands(ALL_CACHE)
+    # get_brands(ALL_CACHE)
 
     # ЗАГРУЗКА ДАННЫХ В ТАБЛИЦУ brands
     # for brand in get_brands(ALL_CACHE):

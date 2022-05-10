@@ -161,10 +161,10 @@ def get_model_list_id() -> list:
 
 def get_model_list_id_by_brand_and_model(brand, model) -> int:
 
-    cursor.execute("SELECT id FROM brand WHERE name = '%s'" % brand)
+    cursor.execute("SELECT id FROM brand WHERE name = N'%s'" % brand)
     brand_id = cursor.fetchall()[0]["id"]
 
-    cursor.execute("SELECT id FROM models WHERE name = '%s'" % model)
+    cursor.execute("SELECT id FROM models WHERE name = N'%s'" % model)
     model_id = cursor.fetchall()[0]["id"]
 
     cursor.execute("SELECT id FROM model_list WHERE brand_id = %d AND model_id = %d" % (brand_id, model_id))
