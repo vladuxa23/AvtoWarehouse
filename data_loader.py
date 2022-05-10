@@ -97,8 +97,8 @@ def get_complectation(cache: dict) -> list:
     complectation = set()
     for key in cache:
         if cache[key].get("Брэнд"):
-            complectation.add((cache[key].get("Брэнд"), cache[key].get("Модель"), cache[key].get("Тип двигателя:"),
-                              cache[key].get("Привод:"), cache[key].get("Коробка передач:")))
+            complectation.add((cache[key].get("Брэнд"), cache[key].get("Модель"), cache[key].get("Комплектация:"),
+                               cache[key].get("Тип двигателя:"),cache[key].get("Привод:"), cache[key].get("Коробка передач:")))
     return list(complectation)
 
 
@@ -134,6 +134,11 @@ if __name__ == '__main__':
     # ЗАГРУЗКА ДАННЫХ в model_list
     # for model in mdb.get_all_models():
     #     mdb.add_model_list(mdb.get_model_id_by_model(model))
+
+    # ЗАГРУЗКА ДАННЫХ в complectation
+    for complectation in get_complectation(ALL_CACHE):
+        mdb.add_complectation(complectation)
+
 
 
 

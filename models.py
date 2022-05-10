@@ -172,20 +172,37 @@ def get_model_list_id_by_brand_and_model(brand, model) -> int:
 
     return model_list_id
 
-def get_engine_type_id_by_name(name: str) -> int:
+def get_engine_type_id_by_name(type: str) -> int:
 
-    # cursor.execute("SELECT brand_id FROM models WHERE id = %d" % model_id)
-    # data = cursor.fetchall()
-    # return data[0]["brand_id"]
+    cursor.execute("SELECT id FROM engine_type WHERE type = N'%s'" %type)
+    data = cursor.fetchall()
+    return data[0]["id"]
 
-def get_drive_type_id_by_name() -> list:
-    ...
+def get_drive_type_id_by_name(type: str) -> int:
+    cursor.execute("SELECT id FROM drive_type WHERE type = N'%s'" %type)
+    data = cursor.fetchall()
+    return data[0]["id"]
 
-def get_transmission_type_id_by_name() -> list:
-    ...
+def get_transmission_type_id_by_name(type: str) -> int:
+    cursor.execute("SELECT id FROM transmission_type WHERE type = N'%s'" %type)
+    data = cursor.fetchall()
+    return data[0]["id"]
 
 def add_complectation(complectation):
-    ...
+    brand_model = get_model_list_id_by_brand_and_model(complectation[0], complectation[1])
+    eng_type = get_engine_type_id_by_name(complectation[3])
+    drive_type = get_drive_type_id_by_name(complectation[4])
+    transmission_type = get_transmission_type_id_by_name(complectation[5])
+    try:
+        cursor.execute("INSERT INTO complectation(model_list_id, name, engine_type_id, drive_type_id, transmission_type_id)\
+                       VALUES (%d, N'%s', %d, %d, %d)" % (brand_model, complectation[2], eng_type, drive_type, transmission_type))
+        conn.commit()
+        return True
+    except pymssql._pymssql.IntegrityError as err:
+        print(err)
+        return False
+
+
 
 
 
@@ -198,7 +215,10 @@ if __name__ == '__main__':
 
     # print(get_all_brands())
     # get_model_list_id()
-    get_model_list_id_by_brand_and_model('Daewoo', 'Matiz')
+    # get_model_list_id_by_brand_and_model('Daewoo', 'Matiz')
+    # get_engine_type_id_by_name('Бензин')
+    # get_drive_type_id_by_name('Полный')
+    # get_transmission_type_id_by_name('Автомат')
 
     # print(cursor.fetchall())  # показать все строки результата запроса
     conn.close()
