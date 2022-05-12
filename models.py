@@ -180,7 +180,6 @@ def get_brand_id_by_model_id(model_id):
     data = cursor.fetchall()
     return data[0]["brand_id"]
 
-
 def get_brand_id_by_brand(brand: str) -> int:
     cursor.execute("SELECT id from brand  where name = N'%s'" % brand)
     data = cursor.fetchall()
@@ -257,6 +256,7 @@ if __name__ == '__main__':
     # get_transmission_type_id_by_name('Автомат')
     # add_avto()
     get_complectation_id('Volkswagen', 'Polo', 'Отсутствует', 'Бензин', 'Передний', 'Механика')
+    # add_avto()
 
     # print(cursor.fetchall())  # показать все строки результата запроса
     conn.close()
