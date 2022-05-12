@@ -49,7 +49,8 @@ def get_models(cache: dict) -> list:
     brands = set()
     for key in cache:
         if cache[key].get('Поколение:'):
-            brands.add((cache[key].get('Модель'), cache[key].get('Поколение:'), mdb.get_brand_id_by_brand(cache[key].get('Брэнд'))))
+            brands.add((cache[key].get('Модель'), cache[key].get('Поколение:'),
+                        mdb.get_brand_id_by_brand(cache[key].get('Брэнд'))))
 
     return list(brands)
 
@@ -99,8 +100,9 @@ def get_complectation(cache: dict) -> list:
     complectation = set()
     for key in cache:
         if cache[key].get("Брэнд"):
-            complectation.add((cache[key].get("Брэнд"), cache[key].get("Модель"), cache[key].get("Комплектация:", "Отсутствует"),
-                               cache[key].get("Тип двигателя:"), cache[key].get("Привод:"), cache[key].get("Коробка передач:")))
+            complectation.add(
+                (cache[key].get("Брэнд"), cache[key].get("Модель"), cache[key].get("Комплектация:", "Отсутствует"),
+                 cache[key].get("Тип двигателя:"), cache[key].get("Привод:"), cache[key].get("Коробка передач:")))
     return list(complectation)
 
 
@@ -108,16 +110,10 @@ def get_avto(cache: dict) -> list:
     avto = set()
     for key in cache:
         if cache[key].get("Брэнд"):
-            avto.add((cache[key].get("Брэнд"), cache[key].get("Модель"),cache[key].get("Пробег:"),
-                        cache[key].get("Владельцев по ПТС:"), cache[key].get("Модификация:"),
+            avto.add((cache[key].get("Брэнд"), cache[key].get("Модель"), cache[key].get("Пробег:"),
+                      cache[key].get("Владельцев по ПТС:"), cache[key].get("Модификация:"),
                       cache[key].get("Цвет:"),))
     return list(avto)
-
-
-
-
-
-
 
 
 if __name__ == '__main__':
@@ -132,7 +128,7 @@ if __name__ == '__main__':
     # for model in get_models(ALL_CACHE):
     #     mdb.add_model(*model)
 
-    # ЗАГРУЗКА ДАННЫХ В complectation
+    # ЗАГРУЗКА ДАННЫХ В drive_type
     # for drive in get_drive_type(ALL_CACHE):
     #     mdb.add_drive_type(drive)
 
@@ -153,15 +149,12 @@ if __name__ == '__main__':
     #     mdb.add_complectation(complectation)
 
     # ЗАГРУЗКА ДАННЫХ в avto
-    for avto in get_avto(ALL_CACHE):
-        mdb.add_avto(avto)
-
-
-
+    # for avto in get_avto(ALL_CACHE):
+    #     mdb.add_avto(avto)
 
     # get_drive_type(ALL_CACHE)
 
-    get_avto(ALL_CACHE)
+    # get_avto(ALL_CACHE)
 
     # get_complectation(ALL_CACHE)
 
