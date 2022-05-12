@@ -63,7 +63,8 @@ def add_model(model, generation, brand_id) -> bool:
     """
 
     try:
-        cursor.execute("INSERT INTO models (name, body_code, brand_id) VALUES (N'%s', N'%s', %d)" % (model, generation, brand_id))
+        cursor.execute(
+            "INSERT INTO models (name, body_code, brand_id) VALUES (N'%s', N'%s', %d)" % (model, generation, brand_id))
         conn.commit()
 
         return True
@@ -114,6 +115,7 @@ def add_transmission_type(transmission_type) -> bool:
         print(err)
         return False
 
+
 def add_model_list(model_id):
     try:
         brand_id = get_brand_id_by_model_id(model_id)
@@ -124,10 +126,60 @@ def add_model_list(model_id):
         print(err)
         return False
 
+
+def add_complectation(complectation):
+    brand_model = get_model_list_id_by_brand_and_model(complectation[0], complectation[1])
+    eng_type = get_engine_type_id_by_name(complectation[3])
+    drive_type = get_drive_type_id_by_name(complectation[4])
+    transmission_type = get_transmission_type_id_by_name(complectation[5])
+    try:
+        cursor.execute("INSERT INTO complectation(model_list_id, name, engine_type_id, drive_type_id, transmission_type_id)\
+                       VALUES (%d, N'%s', %d, %d, %d)" % (
+        brand_model, complectation[2], eng_type, drive_type, transmission_type))
+        conn.commit()
+        return True
+    except pymssql._pymssql.IntegrityError as err:
+        print(err)
+        return False
+
+
+def add_avto(avto):
+
+    model_list_id = get_model_list_id_by_brand_and_model(avto[0], avto[1])
+    mileage = avto[2]
+    owners_count = avto[3]
+    engin_capacity = avto[4]
+    body_color = avto[5]
+    complectation_id = get_complectation_id()
+
+    try:
+        cursor.execute("INSERT INTO avto(model_list_id, mileage, owners_count, engine_capacity, body_color, complectation_id)\
+                       VALUES (%d, %d,  %d, N'%s',N'%s', %d)" % (model_list_id, mileage, owners_count, engin_capacity, \
+                                                                 body_color))
+        conn.commit()
+        return True
+    except pymssql._pymssql.IntegrityError as err:
+        print(err)
+        return False
+
+def get_complectation_id(brand, model, complectation_name, engine, drive_t, transmission):
+    model_list_id = get_model_list_id_by_brand_and_model(brand, model)
+    engine_type_id = get_engine_type_id_by_name(engine)
+    drive_type_id = get_drive_type_id_by_name(drive_t)
+    transmission_type_id = get_transmission_type_id_by_name(transmission)
+    cursor.execute ("SELECT id FROM complectation WHERE model_list_id =%d and name = N'%s' and engine_type_id =%d and \
+                    drive_type_id =%d and transmission_type_id =%d" % (model_list_id, complectation_name, engine_type_id, drive_type_id,\
+                    transmission_type_id))
+    data = cursor.fetchall()
+    return data[0]['id']
+
+
+
 def get_brand_id_by_model_id(model_id):
     cursor.execute("SELECT brand_id FROM models WHERE id = %d" % model_id)
     data = cursor.fetchall()
     return data[0]["brand_id"]
+
 
 def get_brand_id_by_brand(brand: str) -> int:
     cursor.execute("SELECT id from brand  where name = N'%s'" % brand)
@@ -160,7 +212,6 @@ def get_model_list_id() -> list:
 
 
 def get_model_list_id_by_brand_and_model(brand, model) -> int:
-
     cursor.execute("SELECT id FROM brand WHERE name = N'%s'" % brand)
     brand_id = cursor.fetchall()[0]["id"]
 
@@ -172,68 +223,23 @@ def get_model_list_id_by_brand_and_model(brand, model) -> int:
 
     return model_list_id
 
+
 def get_engine_type_id_by_name(type: str) -> int:
-    cursor.execute("SELECT id FROM engine_type WHERE type = N'%s'" %type)
+    cursor.execute("SELECT id FROM engine_type WHERE type = N'%s'" % type)
     data = cursor.fetchall()
     return data[0]["id"]
+
 
 def get_drive_type_id_by_name(type: str) -> int:
-    cursor.execute("SELECT id FROM drive_type WHERE type = N'%s'" %type)
+    cursor.execute("SELECT id FROM drive_type WHERE type = N'%s'" % type)
     data = cursor.fetchall()
     return data[0]["id"]
+
 
 def get_transmission_type_id_by_name(type: str) -> int:
-    cursor.execute("SELECT id FROM transmission_type WHERE type = N'%s'" %type)
+    cursor.execute("SELECT id FROM transmission_type WHERE type = N'%s'" % type)
     data = cursor.fetchall()
     return data[0]["id"]
-
-def add_complectation(complectation):
-    brand_model = get_model_list_id_by_brand_and_model(complectation[0], complectation[1])
-    eng_type = get_engine_type_id_by_name(complectation[3])
-    drive_type = get_drive_type_id_by_name(complectation[4])
-    transmission_type = get_transmission_type_id_by_name(complectation[5])
-    try:
-        cursor.execute("INSERT INTO complectation(model_list_id, name, engine_type_id, drive_type_id, transmission_type_id)\
-                       VALUES (%d, N'%s', %d, %d, %d)" % (brand_model, complectation[2], eng_type, drive_type, transmission_type))
-        conn.commit()
-        return True
-    except pymssql._pymssql.IntegrityError as err:
-        print(err)
-        return False
-
-def add_avto(avto):
-    # compl_id =
-    model_list_id = get_model_list_id_by_brand_and_model(avto[0], avto[1])
-    mileage = (avto[2])
-    owners_count = (avto[3])
-    engin_capacity = (avto[4])
-    body_color = (avto[5])
-
-    try:
-        cursor.execute("INSERT INTO avto(model_list_id, mileage, owners_count, engine_capacity, body_color, complectation_id)\
-                       VALUES (%d, %d,  %d, N'%s',N'%s', %d)" %(model_list_id, mileage, owners_count, engin_capacity,\
-                                                                body_color))
-        conn.commit()
-        return True
-    except pymssql._pymssql.IntegrityError as err:
-        print(err)
-        return False
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 if __name__ == '__main__':
@@ -249,8 +255,8 @@ if __name__ == '__main__':
     # get_engine_type_id_by_name('Бензин')
     # get_drive_type_id_by_name('Полный')
     # get_transmission_type_id_by_name('Автомат')
-    add_avto()
-
+    # add_avto()
+    get_complectation_id('Volkswagen', 'Polo', 'Отсутствует', 'Бензин', 'Передний', 'Механика')
 
     # print(cursor.fetchall())  # показать все строки результата запроса
     conn.close()
