@@ -173,7 +173,6 @@ def get_model_list_id_by_brand_and_model(brand, model) -> int:
     return model_list_id
 
 def get_engine_type_id_by_name(type: str) -> int:
-
     cursor.execute("SELECT id FROM engine_type WHERE type = N'%s'" %type)
     data = cursor.fetchall()
     return data[0]["id"]
@@ -202,6 +201,37 @@ def add_complectation(complectation):
         print(err)
         return False
 
+def add_avto(avto):
+    # compl_id =
+    model_list_id = get_model_list_id_by_brand_and_model(avto[0], avto[1])
+    mileage = (avto[2])
+    owners_count = (avto[3])
+    engin_capacity = (avto[4])
+    body_color = (avto[5])
+
+    try:
+        cursor.execute("INSERT INTO avto(model_list_id, mileage, owners_count, engine_capacity, body_color, complectation_id)\
+                       VALUES (%d, %d,  %d, N'%s',N'%s', %d)" %(model_list_id, mileage, owners_count, engin_capacity,\
+                                                                body_color))
+        conn.commit()
+        return True
+    except pymssql._pymssql.IntegrityError as err:
+        print(err)
+        return False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -219,6 +249,8 @@ if __name__ == '__main__':
     # get_engine_type_id_by_name('Бензин')
     # get_drive_type_id_by_name('Полный')
     # get_transmission_type_id_by_name('Автомат')
+    add_avto()
+
 
     # print(cursor.fetchall())  # показать все строки результата запроса
     conn.close()

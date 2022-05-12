@@ -104,6 +104,17 @@ def get_complectation(cache: dict) -> list:
     return list(complectation)
 
 
+def get_avto(cache: dict) -> list:
+    avto = set()
+    for key in cache:
+        if cache[key].get("Брэнд"):
+            avto.add((cache[key].get("Брэнд"), cache[key].get("Модель"),cache[key].get("Пробег:"),
+                        cache[key].get("Владельцев по ПТС:"), cache[key].get("Модификация:"),
+                      cache[key].get("Цвет:"),))
+    return list(avto)
+
+
+
 
 
 
@@ -138,14 +149,20 @@ if __name__ == '__main__':
     #     mdb.add_model_list(mdb.get_model_id_by_model(model))
 
     # ЗАГРУЗКА ДАННЫХ в complectation
-    for complectation in get_complectation(ALL_CACHE):
-        mdb.add_complectation(complectation)
+    # for complectation in get_complectation(ALL_CACHE):
+    #     mdb.add_complectation(complectation)
+
+    # ЗАГРУЗКА ДАННЫХ в avto
+    for avto in get_avto(ALL_CACHE):
+        mdb.add_avto(avto)
 
 
 
 
     # get_drive_type(ALL_CACHE)
 
-    get_complectation(ALL_CACHE)
+    get_avto(ALL_CACHE)
+
+    # get_complectation(ALL_CACHE)
 
     mdb.conn.close()
