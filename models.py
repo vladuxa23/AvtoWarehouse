@@ -150,25 +150,25 @@ def add_avto(avto):
     owners_count = avto[3]
     engin_capacity = avto[4]
     body_color = avto[5]
-    complectation_id = get_complectation_id()
+    complectation_id = get_complectation_id(model_list_id, avto[8], avto[6], avto[9], avto[7])
 
     try:
         cursor.execute("INSERT INTO avto(model_list_id, mileage, owners_count, engine_capacity, body_color, complectation_id)\
                        VALUES (%d, %d,  %d, N'%s',N'%s', %d)" % (model_list_id, mileage, owners_count, engin_capacity, \
-                                                                 body_color))
+                                                                 body_color, complectation_id))
         conn.commit()
         return True
     except pymssql._pymssql.IntegrityError as err:
         print(err)
         return False
 
-def get_complectation_id(brand, model, complectation_name, engine, drive_t, transmission):
-    model_list_id = get_model_list_id_by_brand_and_model(brand, model)
+def get_complectation_id(mod_lst_id, complectation_name, engine, drive_t, transmission):
+
     engine_type_id = get_engine_type_id_by_name(engine)
     drive_type_id = get_drive_type_id_by_name(drive_t)
     transmission_type_id = get_transmission_type_id_by_name(transmission)
     cursor.execute ("SELECT id FROM complectation WHERE model_list_id =%d and name = N'%s' and engine_type_id =%d and \
-                    drive_type_id =%d and transmission_type_id =%d" % (model_list_id, complectation_name, engine_type_id, drive_type_id,\
+                    drive_type_id =%d and transmission_type_id =%d" % (mod_lst_id, complectation_name, engine_type_id, drive_type_id,\
                     transmission_type_id))
     data = cursor.fetchall()
     return data[0]['id']

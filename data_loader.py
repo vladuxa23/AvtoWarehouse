@@ -110,9 +110,10 @@ def get_avto(cache: dict) -> list:
     avto = set()
     for key in cache:
         if cache[key].get("Брэнд"):
-            avto.add((cache[key].get("Брэнд"), cache[key].get("Модель"), cache[key].get("Пробег:"),
-                      cache[key].get("Владельцев по ПТС:"), cache[key].get("Модификация:"),
-                      cache[key].get("Цвет:"), cache[key].get("Тип двигателя:"), cache[key].get("Коробка передач:"),))
+            avto.add((cache[key].get("Брэнд"), cache[key].get("Модель"), int(cache[key].get("Пробег:", '999999999').rstrip('\\xa0км')),
+                      int(cache[key].get("Владельцев по ПТС:", '0').replace('4+', '99')), cache[key].get("Модификация:", "Отсутствует"),
+                      cache[key].get("Цвет:"), cache[key].get("Тип двигателя:"), cache[key].get("Коробка передач:"),
+                      cache[key].get("Комплектация:", "Отсутствует"), cache[key].get("Привод:")))
     return list(avto)
 
 
@@ -149,8 +150,8 @@ if __name__ == '__main__':
     #     mdb.add_complectation(complectation)
 
     # ЗАГРУЗКА ДАННЫХ в avto
-    # for avto in get_avto(ALL_CACHE):
-    #     mdb.add_avto(avto)
+    for avto in get_avto(ALL_CACHE):
+        mdb.add_avto(avto)
 
     # get_drive_type(ALL_CACHE)
 
